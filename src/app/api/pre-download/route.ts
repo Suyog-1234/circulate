@@ -7,8 +7,8 @@ export const POST = async (req: NextRequest) => {
    try {
       const { fileKey} = await req.json();
       const preSignedUrlBuildCommand = new GetObjectCommand({
-          Bucket:"circulate-bucket",
-          Key:fileKey,
+          Bucket:"circulate-dev-new",
+          Key:`upload/${fileKey}`,
       })
       const preSignedUrl = await getSignedUrl(s3,preSignedUrlBuildCommand);
       return NextResponse.json({url:preSignedUrl},{status:201})

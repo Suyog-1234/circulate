@@ -6,17 +6,14 @@ import { NextRequest, NextResponse } from "next/server"
 export const POST = async (req: NextRequest) => {
    try {
       const { fileKey, fileSize, contentType} = await req.json();
-      if(fileSize > 30){
-         return NextResponse.json({message:"file size should not be more than 10mb"},{status:401})
-      }
       const preSignedUrlBuildCommand = new PutObjectCommand({
-          Bucket:"circulate-bucket",
+          Bucket:"circulate-dev-new",
           Key:`upload/${fileKey}`,
-          ContentType:'application/zip'
+          ContentType:contentType
       })
       const preSignedUrl = await getSignedUrl(s3,preSignedUrlBuildCommand);
       return NextResponse.json({url:preSignedUrl},{status:201})
    } catch (error) {
-      return NextResponse.json({ message: "internal server error" }, { status: 501 });
+      return NextResponse.json({ message: "internal server error" ,error:error}, { status: 501 });
    }
 } 
